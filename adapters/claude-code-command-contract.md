@@ -43,7 +43,16 @@ not replace:
 
 ## Validation Boundary
 
-If non-interactive Claude Code command validation hangs or returns no output,
-record that as a tooling/runtime validation gap. Do not mark the command path as
-fully validated until it has been exercised successfully in interactive Claude
-Code or another reliable execution mode.
+Non-interactive Claude Code command validation can take longer than simple CLI
+smoke tests. Use a longer timeout window, capture stdout and stderr to files,
+and record elapsed time before treating a run as failed.
+
+Recommended validation sequence:
+
+1. Run a plain control prompt and confirm the CLI returns output.
+2. Run each slash-command prompt with a longer timeout.
+3. Inspect the command output for workflow semantics, especially edit
+   permission, stop conditions, and patch-writing instructions.
+4. Confirm the target repository or worktree remains clean for read-only runs.
+5. Fall back to interactive Claude Code validation only after the longer
+   non-interactive run still hangs or returns no usable output.

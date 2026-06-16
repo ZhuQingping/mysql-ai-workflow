@@ -24,5 +24,13 @@ Return:
 - night-run permission
 - next workflow step
 
-Stop if the authority file, scope, or edit permission is unclear.
+Edit permission rule:
 
+- code edits are denied by default
+- allowed files are only the maximum boundary after permission is granted
+- `no edits`, `do not edit`, `validation-only`, `review-only`, and `dry run`
+  mean `Code-edit permission: DENIED`
+- report `Code-edit permission: GRANTED` only when the current human
+  instruction or accepted task document explicitly authorizes edits
+
+Stop if the authority file, scope, or edit permission is unclear.

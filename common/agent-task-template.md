@@ -28,6 +28,7 @@ Worktree:
 Dirty-state policy:
 
 Allowed files:
+  Maximum edit boundary only. This does not grant edit permission.
 
 Forbidden files:
 
@@ -36,6 +37,11 @@ Reference files:
 Required commands:
 
 Patch output:
+
+Code-edit permission:
+  DENIED unless explicitly granted by the current human instruction or accepted
+  task document. If DENIED, do not edit files and do not produce patch-writing
+  instructions.
 
 Expected output:
   - changed files

@@ -61,17 +61,47 @@ Important validation behavior:
 
 ## Claude Code Validation
 
-Status: PARTIAL.
+Status: PASS after remediation.
 
-The command files were installed and present under `~/.claude/commands`, but
-non-interactive Claude CLI validation did not return output for:
+The command files were installed under `~/.claude/commands` and validated with
+the non-interactive Claude CLI using longer wait windows.
 
-- the full four-workflow validation prompt
-- a smaller `/workflow-intake` smoke prompt
+Validated commands:
 
-This is recorded as a tooling/runtime validation gap, not a workflow content
-pass. The next validation should run these commands in interactive Claude Code
-or with a smaller tool-disabled prompt strategy that is known to return.
+- plain Claude CLI control prompt: PASS
+- `/workflow-intake`: PASS after remediation
+- `/workflow-dispatch`: PASS after remediation
+- `/workflow-review`: PASS; recommendation was `ACCEPT WITH RISKS`
+- `/workflow-night-run`: PASS
+
+Initial Claude Code findings:
+
+- `/workflow-intake` incorrectly reported edit permission as granted even
+  though the prompt said `No edits`.
+- `/workflow-dispatch` incorrectly generated a code-editing patch task even
+  though the prompt said `Validation-only. Do not edit files.`
+- `/workflow-review` behaved as expected and did not mutate files.
+- `/workflow-night-run` behaved as expected and reported
+  `Code-edit permission: DENIED`.
+
+Remediation:
+
+- Added a shared edit-permission gate to `common/precedence.md`.
+- Updated intake and agent task templates to state that allowed files are only
+  a maximum boundary, not edit authorization.
+- Updated adapter contracts, Claude commands, and Codex skills to deny edits by
+  default and to treat `no edits`, `validation-only`, `review-only`, and
+  `dry run` as explicit denial.
+- Reinstalled Claude commands and Codex skills.
+
+Regression result:
+
+- `/workflow-intake` now reports `Code-edit permission: DENIED` for the
+  validation-only dry run.
+- `/workflow-dispatch` now produces a read-only Review Agent task, sets
+  allowed edit files to none, forbids all modifications, and omits patch-writing
+  instructions.
+- The sample target repository remained clean after validation.
 
 ## Gaps Found
 
@@ -82,15 +112,15 @@ or with a smaller tool-disabled prompt strategy that is known to return.
    fallback commands, and owner review requirements.
 3. The README directory layout still had stale scenario names from an earlier
    version.
-4. Claude Code slash commands are installed, but non-interactive command
-   execution needs further validation.
+4. Long Claude Code command runs can take over 60 seconds; validation scripts
+   should use longer timeouts and record elapsed time.
 
 ## Follow-up Actions
 
 - Update `common/agent-report-template.md` with verification waiver and fallback
   fields.
-- Update `adapters/claude-code-command-contract.md` to require interactive
-  validation when non-interactive slash-command validation hangs or returns no
-  output.
+- Update `adapters/claude-code-command-contract.md` to recommend longer
+  non-interactive validation timeouts and interactive fallback only after the
+  longer timeout fails.
 - Fix README stale scenario names.
-- Re-run Claude command validation interactively.
+- Add a small repeatable validation script for Claude Code commands.

@@ -30,6 +30,21 @@ another path:
 4. Produce a self-contained task prompt.
 5. Do not dispatch broad tasks that mix unrelated domains.
 
+## Edit Permission Rule
+
+Code edits are denied by default. Allowed files define the maximum boundary only
+after edit permission is granted; they do not grant permission by themselves.
+Worktree paths, artifact paths, obvious fixes, or low-risk changes do not grant
+edit permission.
+
+If the request says `no edits`, `do not edit`, `validation-only`,
+`review-only`, or `dry run`, output `Code-edit permission: DENIED`, produce a
+read-only validation/review task, and do not include patch-writing instructions.
+
+Report `Code-edit permission: GRANTED` only when the current human instruction
+or accepted task document explicitly authorizes edits, and only for the named
+allowed files.
+
 ## Output
 
 Return a task prompt containing:

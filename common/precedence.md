@@ -14,5 +14,23 @@ Feature-specific documents and domain profiles may narrow scope, add tests, or
 impose stricter ownership rules. Narrower or stricter safety rules win over
 broader defaults.
 
+## Edit Permission Gate
+
+Code edits are denied by default.
+
+Allowed files define the maximum edit boundary only after edit permission is
+granted. They do not grant edit permission by themselves. Worktree paths,
+artifact paths, reproducible failures, obvious fixes, or low-risk changes also
+do not grant edit permission.
+
+Treat the task as read-only when the request says `no edits`, `do not edit`,
+`validation-only`, `review-only`, `dry run`, or when code-edit permission is not
+explicit. In those cases, report `Code-edit permission: DENIED` and do not
+produce a patch-writing task.
+
+Report `Code-edit permission: GRANTED` only when the current human instruction
+or accepted task document explicitly authorizes edits, and only for the named
+allowed files.
+
 Adapters describe how a tool executes the workflow. They are not the workflow
 source of truth.

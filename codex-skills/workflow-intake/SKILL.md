@@ -36,6 +36,18 @@ another path:
 5. Stop if the authority file or scope is unclear and a reasonable assumption
    would be risky.
 
+## Edit Permission Rule
+
+Code edits are denied by default. Allowed files define the maximum boundary only
+after edit permission is granted; they do not grant permission by themselves.
+
+If the request says `no edits`, `do not edit`, `validation-only`,
+`review-only`, or `dry run`, report `Code-edit permission: DENIED`.
+
+Report `Code-edit permission: GRANTED` only when the current human instruction
+or accepted task document explicitly authorizes edits, and only for the named
+allowed files.
+
 ## Output
 
 Return:
@@ -49,4 +61,3 @@ Return:
 - edit permission
 - night-run permission
 - next workflow step
-

@@ -25,6 +25,7 @@ Scope:
   Out of scope:
 
 Allowed files:
+  - maximum boundary only; does not grant edit permission
 
 Forbidden files:
 
@@ -41,6 +42,12 @@ Risk level:
 
 Can run overnight:
   yes | no
+
+Code-edit permission:
+  DENIED by default unless the current human instruction or accepted task
+  document explicitly authorizes edits. If the request says no edits,
+  validation-only, review-only, or dry run, this must be DENIED even when
+  allowed files are listed.
 
 Human approval required before:
   design | code edit | test run | commit | external publish

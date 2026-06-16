@@ -34,6 +34,17 @@ An adapter must capture:
 - code-edit permission
 - artifact output path
 
+## Edit Permission Rule
+
+Adapters must treat code-edit permission as denied by default. `allowed files`
+only define the edit boundary after permission is granted. A worktree path,
+artifact path, obvious bug, passing reproduction, or low-risk patch is not
+permission to edit.
+
+If a request says `no edits`, `do not edit`, `validation-only`, `review-only`,
+or `dry run`, the adapter must output `Code-edit permission: DENIED` and must
+not generate a code-editing or patch-writing task.
+
 ## Required Outputs
 
 An adapter must produce or require:
@@ -56,4 +67,3 @@ The adapter must stop when:
 - code-edit permission is missing for tasks that request edits
 - verification cannot run and no accepted waiver is provided
 - the task conflicts with the repository authority file
-
