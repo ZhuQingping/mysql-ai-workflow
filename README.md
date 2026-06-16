@@ -48,7 +48,6 @@ mysql_ai_workflow/
     feature-development.md
     performance-optimization.md
     bugfix-issue.md
-    test-migration.md
     external-docs.md
     quality-hardening.md
     test-suite-migration.md

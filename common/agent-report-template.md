@@ -33,6 +33,12 @@ Evidence:
   - test output:
   - benchmark data:
 
+Verification gaps:
+  - command not run:
+  - reason:
+  - diagnostic fallback:
+  - owner decision required:
+
 Risks:
 
 Scope deviations:

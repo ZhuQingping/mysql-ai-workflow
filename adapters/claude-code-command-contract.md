@@ -41,3 +41,9 @@ not replace:
 - project facts in the repository authority file
 - task-specific decisions in feature task documents
 
+## Validation Boundary
+
+If non-interactive Claude Code command validation hangs or returns no output,
+record that as a tooling/runtime validation gap. Do not mark the command path as
+fully validated until it has been exercised successfully in interactive Claude
+Code or another reliable execution mode.
