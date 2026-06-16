@@ -1,36 +1,30 @@
 # AI Workflows
 
-Languages: English | [简体中文](README.zh-CN.md)
+语言：[English](README.md) | 简体中文
 
-This repository defines an agent-neutral workflow system for daily software
-development. It is intentionally not tied to Codex, Claude Code, Cursor, or any
-single automation platform or project.
+本仓库定义了一套面向日常软件开发的、Agent 中立的工作流系统。它不绑定
+Codex、Claude Code、Cursor，也不绑定任何单一自动化平台或具体项目。
 
-Each project should define its own repository entrypoint and authority file.
-This repository provides the reusable workflow layer: it describes how different
-classes of work should move from intake to delivery.
+每个项目都应该定义自己的代码仓入口文件和权威上下文文件。本仓库提供可复用
+的工作流层：它描述不同类型的工作如何从任务准入推进到最终交付。
 
-The English README is the primary maintenance source. Translations should keep
-the same workflow semantics, command names, file paths, and safety rules.
+英文 README 是主要维护源。翻译版本应保持相同的工作流语义、命令名称、文件
+路径和安全规则。
 
-## Design Principles
+## 设计原则
 
-- Keep workflow assets agent-neutral. Tool-specific behavior belongs in
-  `adapters/`.
-- Use file-based handoff between agents: task documents, patches, reports,
-  logs, and verification results.
-- Keep implementation work bounded by explicit allowed and forbidden files.
-- Let the orchestrator own cross-layer decisions, integration, review, and
-  commits.
-- Treat night work as draft-producing by default. Night agents may produce
-  reports, patches, classifications, and test results, but should not merge
-  changes without explicit approval.
-- Prefer small, reviewable tasks over broad autonomous edits.
+- workflow 资产保持 Agent 中立。工具相关行为放在 `adapters/` 中。
+- Agent 之间通过文件交接：任务文档、patch、报告、日志和验证结果。
+- 实现工作必须受明确的 allowed files 和 forbidden files 约束。
+- Orchestrator 负责跨层决策、集成、检视和提交。
+- 夜间任务默认只产出草稿。夜间 Agent 可以产出报告、patch、分类和测试结果，
+  但没有明确批准时不应合入变更。
+- 优先拆成小的、可检视的任务，避免宽泛的自动修改。
 
-Adapters must follow `adapters/contracts.md`. Tool-specific files can add
-mechanics, but cannot weaken common workflow rules.
+Adapter 必须遵循 `adapters/contracts.md`。工具专用文件可以增加执行机制，
+但不能弱化通用工作流规则。
 
-## Directory Layout
+## 目录结构
 
 ```text
 mysql_ai_workflow/
@@ -89,29 +83,26 @@ mysql_ai_workflow/
     install_claude_commands.sh
 ```
 
-## How To Choose A Workflow
+## 如何选择工作流
 
-- New feature: use `scenarios/feature-development.md`.
-- Performance work: use `scenarios/performance-optimization.md`.
-- Customer issue or bugfix: use `scenarios/bugfix-issue.md`.
-- Test suite migration: use `scenarios/test-suite-migration.md`.
-- External-facing docs or release notes: use `scenarios/external-docs.md`.
-- Risk closure, stability, or regression hardening: use
-  `scenarios/quality-hardening.md`.
+- 新特性：使用 `scenarios/feature-development.md`。
+- 性能工作：使用 `scenarios/performance-optimization.md`。
+- 客户问题或 bugfix：使用 `scenarios/bugfix-issue.md`。
+- 测试套件迁移：使用 `scenarios/test-suite-migration.md`。
+- 外部文档或发布说明：使用 `scenarios/external-docs.md`。
+- 风险闭环、稳定性或回归加固：使用 `scenarios/quality-hardening.md`。
 
-For feature-specific work, also read that feature's task board and phase
-documents. Feature-specific documents may add stricter rules, but should not
-replace the common workflow layer.
+对于特性相关工作，还要读取该特性的任务板和阶段文档。特性文档可以增加更
+严格的规则，但不应替代通用工作流层。
 
-For domain-specific work, also read the matching profile under `profiles/`.
+对于领域相关工作，还要读取 `profiles/` 下匹配的 profile。
 
-## Typical Usage Patterns
+## 典型使用模式
 
-Use this repository as the reusable workflow layer. Work starts in the target
-code repository, while this repository supplies the task classification,
-handoff templates, review gates, and tool adapters.
+将本仓库作为可复用的工作流层。实际工作从目标代码仓开始，本仓库提供任务
+分类、交接模板、检视门禁和工具 adapter。
 
-Every task should start with intake:
+每个任务都应该从 intake 开始：
 
 ```text
 Use the workflow repository:
@@ -137,12 +128,12 @@ Return:
 - next workflow step
 ```
 
-### Issue Fix
+### 问题单修复
 
-Use for customer issues, internal bug reports, failing tests, wrong results,
-crashes, regressions, or production incidents.
+适用于客户问题、内部 bug 报告、失败测试、错误结果、crash、回归或生产
+事故。
 
-Workflow:
+工作流：
 
 ```text
 workflow-intake
@@ -152,7 +143,7 @@ workflow-intake
 -> human integration or commit
 ```
 
-Example prompt:
+示例提示词：
 
 ```text
 Use workflow-intake and workflow-dispatch.
@@ -180,12 +171,12 @@ After intake is accepted, create a bounded Code Agent task with:
 - no commit
 ```
 
-### New Feature Development
+### 新特性开发
 
-Use for new behavior, new syntax, new APIs, optimizer or execution changes,
-storage behavior, compatibility work, or larger multi-phase implementation.
+适用于新行为、新语法、新 API、优化器或执行器改动、存储行为、兼容性工作，
+或更大的多阶段实现。
 
-Workflow:
+工作流：
 
 ```text
 workflow-intake
@@ -198,7 +189,7 @@ workflow-intake
 -> docs and retrospective
 ```
 
-Example prompt:
+示例提示词：
 
 ```text
 Use workflow-intake for a new feature.
@@ -225,12 +216,11 @@ Output:
 - whether parallel agents are safe
 ```
 
-### Self-Test And Verification
+### 自测试和验证
 
-Use for self-testing before handoff, regression validation, reproducing a
-failure, checking a patch, or building confidence before review.
+适用于交付前自测试、回归验证、复现失败、检查 patch，或在检视前建立信心。
 
-Workflow:
+工作流：
 
 ```text
 workflow-intake
@@ -240,7 +230,7 @@ workflow-intake
 -> record gaps and owner decisions
 ```
 
-Example prompt:
+示例提示词：
 
 ```text
 Use workflow-intake for self-test.
@@ -265,12 +255,11 @@ Please:
 - do not commit
 ```
 
-### Performance Optimization
+### 性能优化
 
-Use for latency, throughput, CPU, memory, lock contention, plan quality, IO, or
-benchmark regressions.
+适用于延迟、吞吐、CPU、内存、锁竞争、计划质量、IO 或 benchmark 回归。
 
-Workflow:
+工作流：
 
 ```text
 workflow-intake
@@ -281,7 +270,7 @@ workflow-intake
 -> workflow-review
 ```
 
-Example prompt:
+示例提示词：
 
 ```text
 Use workflow-intake for performance-optimization.
@@ -302,12 +291,12 @@ Output baseline commands, suspected components, profiling plan, risk areas,
 and the smallest safe next task.
 ```
 
-### Test Migration
+### 测试迁移
 
-Use for moving tests between frameworks, stabilizing flaky tests, splitting
-large test suites, or adding coverage for migrated behavior.
+适用于在测试框架之间迁移测试、稳定 flaky test、拆分大型测试套件，或为迁移
+后的行为增加覆盖。
 
-Workflow:
+工作流：
 
 ```text
 workflow-intake
@@ -317,7 +306,7 @@ workflow-intake
 -> workflow-review
 ```
 
-Example prompt:
+示例提示词：
 
 ```text
 Use workflow-intake for test-suite-migration.
@@ -338,12 +327,11 @@ Return migration scope, files, equivalence checks, forbidden areas, and
 verification commands.
 ```
 
-### Documentation
+### 文档
 
-Use for customer-facing docs, release notes, design notes, runbooks, upgrade
-notes, or internal engineering handoff.
+适用于客户可见文档、发布说明、设计说明、runbook、升级说明或内部工程交接。
 
-Workflow:
+工作流：
 
 ```text
 workflow-intake
@@ -353,7 +341,7 @@ workflow-intake
 -> human publish approval
 ```
 
-Example prompt:
+示例提示词：
 
 ```text
 Use workflow-intake for external-docs.
@@ -373,12 +361,12 @@ Return source facts to read, audience, required examples, forbidden claims,
 reviewers, and publish gate.
 ```
 
-### Quality Hardening
+### 质量加固
 
-Use for risk closure, boundary tests, regression hardening, static analysis,
-fuzzing, cleanup after a feature, or release-readiness work.
+适用于风险闭环、边界测试、回归加固、静态分析、fuzzing、特性后的清理，或
+发布就绪工作。
 
-Workflow:
+工作流：
 
 ```text
 workflow-intake
@@ -388,7 +376,7 @@ workflow-intake
 -> verification matrix update
 ```
 
-Example prompt:
+示例提示词：
 
 ```text
 Use workflow-intake for quality-hardening.
@@ -409,31 +397,30 @@ Return risk list, missing tests, verification matrix, candidate bounded tasks,
 and stop conditions.
 ```
 
-## Examples
+## 示例
 
 - `examples/task-prompts/bugfix-issue.md`
 - `examples/reports/agent-report.md`
 
-## Installation
+## 安装
 
-### Local Machine
+### 本机
 
-Install Codex skills:
+安装 Codex skills：
 
 ```bash
 ./scripts/install_codex_skills.sh
 ```
 
-Install Claude Code slash commands:
+安装 Claude Code slash commands：
 
 ```bash
 ./scripts/install_claude_commands.sh
 ```
 
-### Another Machine
+### 其他机器
 
-Clone or copy this repository to the new machine, then run the install scripts
-from the repository root:
+将本仓库 clone 或复制到新机器，然后在仓库根目录运行安装脚本：
 
 ```bash
 git clone <repo-url> mysql_ai_workflow
@@ -442,18 +429,17 @@ cd mysql_ai_workflow
 ./scripts/install_claude_commands.sh
 ```
 
-If the repository is copied without Git, the same install scripts still work as
-long as the directory layout is preserved.
+如果不是通过 Git 获取，而是直接复制目录，只要目录结构保持不变，安装脚本
+同样可用。
 
-After installation:
+安装后：
 
-- Codex skills are installed under `~/.codex/skills/`.
-- Claude Code slash commands are installed under `~/.claude/commands/`.
-- Target code repositories do not need to vendor this workflow repository.
+- Codex skills 安装到 `~/.codex/skills/`。
+- Claude Code slash commands 安装到 `~/.claude/commands/`。
+- 目标代码仓不需要 vendor 这个 workflow 仓库。
 
-For each target repository, add only a small agent entrypoint such as
-`AGENTS.md` or `CLAUDE.md` that points to the project authority file and this
-workflow repository:
+对于每个目标代码仓，只需要增加一个很薄的 Agent 入口文件，例如
+`AGENTS.md` 或 `CLAUDE.md`，指向项目权威文件和本 workflow 仓库：
 
 ```md
 # AI Agent Entry
@@ -476,8 +462,8 @@ Code edits are denied unless the current human instruction explicitly grants
 permission.
 ```
 
-On machines where the workflow repository path differs, either:
+如果不同机器上的 workflow 仓库路径不同，可以选择：
 
-- mention the absolute path in each prompt, or
-- update the target repository entrypoint to point to the local path, or
-- keep a stable symlink such as `~/Workflows/mysql_ai_workflow`.
+- 每次在提示词里写明绝对路径；或
+- 更新目标代码仓入口文件，让它指向本机路径；或
+- 保持一个稳定软链接，例如 `~/Workflows/mysql_ai_workflow`。
