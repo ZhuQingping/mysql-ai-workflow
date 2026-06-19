@@ -39,6 +39,8 @@ Risk checks:
 ## Report Review
 
 - The report includes commands and results.
+- Each verification command is marked as `RUN`, `NOT RUN`, or `RECOMMENDED`.
+- Recommended follow-up checks are not presented as completed verification.
 - Failures include the first relevant error and log path.
 - Risks are specific enough to act on.
 - The next action is clear.

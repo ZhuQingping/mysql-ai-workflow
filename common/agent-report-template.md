@@ -25,6 +25,10 @@ Excluded artifacts:
 Summary:
 
 Commands run:
+  - status: RUN | NOT RUN | RECOMMENDED
+    command:
+    exit code:
+    key output or log path:
 
 Results:
 
