@@ -2,6 +2,10 @@
 
 Use this in addition to `common/verification-matrix.md`.
 
+For final feature acceptance, also use `acceptance-standard.md`. The acceptance
+standard is stricter than this matrix and defines required full-MTR,
+sanitizer, coverage, performance, waiver, and review evidence.
+
 ## Build
 
 - Prefer the repository authority file's canonical build command.
@@ -32,4 +36,5 @@ cd build-ninja && ninja mysqld -j 16
 - Record dataset, server options, warmup, run count, and baseline.
 - Verify correctness before measuring speed.
 - Record variance or repeated runs for any performance claim.
-
+- Use the benchmark required by the feature area for final acceptance. For
+  example, plan cache uses sysbench, while parallel query and PTRC use TPC-H.

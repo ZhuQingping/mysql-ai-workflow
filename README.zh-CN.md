@@ -65,12 +65,14 @@ mysql_ai_workflow/
       README.md
       verification-matrix.md
       review-gate.md
+      acceptance-standard.md
 
   codex-skills/
     workflow-intake/
     workflow-dispatch/
     workflow-review/
     workflow-night-run/
+    mysql-acceptance-gate/
 
   claude-commands/
     workflow-intake.md
