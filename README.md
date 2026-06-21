@@ -267,6 +267,57 @@ Please:
 - do not commit
 ```
 
+### MySQL Feature Acceptance
+
+Use for final acceptance of MySQL or database-kernel features after feature
+implementation, quality hardening, or performance work. This is a MySQL domain
+profile gate, not a replacement for `feature-development`,
+`quality-hardening`, or `performance-optimization`.
+
+Workflow:
+
+```text
+workflow-intake
+-> feature implementation or hardening workflow
+-> mysql-acceptance-gate
+-> workflow-review
+-> human final decision or submission
+```
+
+The acceptance gate reads
+`profiles/mysql-kernel/acceptance-standard.md` and checks focused feature tests,
+release/debug full MTR, ASAN/UBSAN/LSAN, coverage, feature-specific performance
+evidence, reference parity, documentation, waivers, and independent review.
+
+Performance benchmarks are selected by feature area. Plan cache uses sysbench;
+parallel query and PTRC use TPC-H; other MySQL kernel features must justify a
+feature-specific benchmark in the acceptance report.
+
+Example prompt:
+
+```text
+Use mysql-acceptance-gate.
+
+Workflow repository:
+<path-to>/mysql_ai_workflow
+
+Target repository:
+current directory
+
+Feature:
+<describe the MySQL feature>
+
+No code edits.
+
+Please:
+- read the repository authority file
+- identify the feature type and required performance benchmark
+- summarize current acceptance evidence
+- list missing or stale gates
+- produce the next test plan and waiver list
+- return ACCEPT, ACCEPT WITH RISKS, or CONTINUE TESTING
+```
+
 ### Performance Optimization
 
 Use for latency, throughput, CPU, memory, lock contention, plan quality, IO, or

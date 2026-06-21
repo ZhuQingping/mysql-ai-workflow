@@ -257,6 +257,55 @@ Please:
 - do not commit
 ```
 
+### MySQL 特性验收
+
+适用于 MySQL 或数据库内核特性在实现、质量加固或性能工作完成后的最终验收。
+这是 MySQL domain profile 的门禁，不替代 `feature-development`、
+`quality-hardening` 或 `performance-optimization`。
+
+工作流：
+
+```text
+workflow-intake
+-> feature implementation or hardening workflow
+-> mysql-acceptance-gate
+-> workflow-review
+-> human final decision or submission
+```
+
+验收门禁会读取 `profiles/mysql-kernel/acceptance-standard.md`，检查特性定向
+测试、release/debug 全量 MTR、ASAN/UBSAN/LSAN、覆盖率、特性性能证据、
+reference parity、文档、waiver 和独立检视。
+
+性能 benchmark 按特性类型选择。plan cache 使用 sysbench；parallel query 和
+PTRC 使用 TPC-H；其它 MySQL kernel 特性需要在验收报告中说明并论证特性适配
+的 benchmark。
+
+示例提示词：
+
+```text
+Use mysql-acceptance-gate.
+
+Workflow repository:
+<path-to>/mysql_ai_workflow
+
+Target repository:
+current directory
+
+Feature:
+<describe the MySQL feature>
+
+No code edits.
+
+Please:
+- read the repository authority file
+- identify the feature type and required performance benchmark
+- summarize current acceptance evidence
+- list missing or stale gates
+- produce the next test plan and waiver list
+- return ACCEPT, ACCEPT WITH RISKS, or CONTINUE TESTING
+```
+
 ### 性能优化
 
 适用于延迟、吞吐、CPU、内存、锁竞争、计划质量、IO 或 benchmark 回归。
